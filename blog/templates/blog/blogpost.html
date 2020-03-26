@@ -1,0 +1,57 @@
+{% extends 'blog/basic.html' %}
+{% block head %}
+     <meta property="og:url"           content="http://127.0.0.1:8000/blog/blogpost/{{ post.title }}" />
+     <meta property="og:type"          content="website" />
+     <meta property="og:title"         content="{{ post.title}}" />
+     <meta property="og:description"   content="{{ post.|slice:'0:100'}}..." />
+     <meta property="og:image"         content="/media/{{post.thumbnail}}" />
+{% endblock %}
+{% block title %} Title of Home Page {% endblock %}
+
+{% block body %}
+   <div class="container mt-5 py-5">
+        <div class="row">
+        <div class="col-md-8 blog-main">
+          <h3 class="pb-3 mb-4 font-italic border-bottom">
+            {{ post.title}}
+          </h3>
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">{{ post.head1 }}</h2>
+            <p class="blog-post-meta">{{ post.pub_date }}</p>
+                <img style="width:100%;height:300px;object-fit:cover;padding-bottom:20px" src="/media/{{post.thumbnail}}" class="img-fluid" alt="Responsive image">
+              <div class="fb-like pb-2" data-href="http://127.0.0.1:8000/blog/blogpost/{{ post.title }}" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
+              <p>{{ post.chead1 }}</p>
+                <h2>{{ post.head2 }}</h2>
+                <p>{{ post.chead2 }}</p>
+                <h3>{{ post.head3 }}</h3>
+                <p>{{ post.chead3 }}</p>
+              <div class="sharethis-inline-share-buttons"></div>
+              <div class="fb-comments" data-href="http://127.0.0.1:8000/blog/blogpost/{{ post.title }}" data-width="" data-numposts="5"></div>
+          </div>
+
+
+
+        </div><!-- /.blog-main -->
+
+        <aside class="col-md-4 blog-sidebar">
+          <div class="p-3 mb-3 bg-light rounded">
+            <h4 class="font-italic">About</h4>
+            <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+          <div class="fb-share-button" data-href="http://127.0.0.1:8000/blog/blogpost/{{ post.title }}" data-layout="button_count" data-size="small"><a target="_blank" href="http://127.0.0.1:8000/blog/blogpost/{{ post.title }}" class="fb-xfbml-parse-ignore">Share</a></div>
+          </div>
+
+          <div class="p-3">
+            <h4 class="font-italic">Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="#">GitHub</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">Facebook</a></li>
+            </ol>
+          </div>
+        </aside><!-- /.blog-sidebar -->
+
+      </div>
+   </div>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'shop/basic.html' %}
+{% block title %} Title of Home Page {% endblock %}
+
+{% block body %}
+    <div class="container mt-5 pt-3">
+        <div class="col-12">
+            <h5 class="pb-2">ECOM Cart Tracker - Enter your Order Id and Email Address to Track your order</h5>
+            <form method="POST" action="#" id="trackerForm">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="orderId">Order id</label>
+                        <input type="text" class="form-control" name="orderId" id="orderId" placeholder="Order Id" >
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail">Email</label>
+                        <input type="email" class="form-control" name="email" id="inputEmail" placeholder="Email" >
+                    </div>
+                </div>
+            <button type="submit" class="btn btn-primary">Track Order</button>
+            </form>
+        </div>
+        <div class="col-12 mt-4">
+            <h3 class="py-2">Your order Status</h3>
+
+            <ul class="list-group" id="items">
+            
+            </ul>
+
+            <h3 class="py-2">Your order Details</h3>
+            
+            <ul class="list-group" id="citems">
+            
+            </ul>
+        </div>
+
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $('#trackerForm').submit(function(event){
+
+            $('#items').empty();
+            var formData = {
+                'orderId': $('input[name=orderId]').val(),
+                'email': $('input[name=email]').val(),
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+        }
+
+            $.ajax({
+                type:'POST',
+                url:'/shop/tracker/',
+                data: formData,
+                encode:true
+            })
+
+            .done(function(data){
+                $('#citems').empty();
+                console.log(data);
+                data = JSON.parse(data);
+                if(data['status'] == 'success'){
+                    updates = data['updates'];
+                    for (i=0;i<updates.length;i++) {
+                        let text = updates[i]['text'];
+                        let time = updates[i]['time'];
+                        mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                                ${text}<span class="badge badge-primary badge-pill" > ${time} </span > </li>`;
+                        $('#items').append(mystr);
+                    }
+
+                 // cart
+                cart = JSON.parse(data['itemJson']);
+                console.log(cart);
+                for (item in cart) {
+                    let name = cart[item][1];
+                    let qty = cart[item][0];
+                    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                            ${name}<span class="badge badge-primary badge-pill" > ${qty} </span > </li>`;
+                    $('#citems').append(mystr);
+                }
+                }
+                else{
+                    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                                shory not valid id and email  </li>`;
+                    $('#items').append(mystr);
+                }
+
+            })
+
+            event.preventDefault();
+
+        });
+    </script>
+{% endblock %}
+
